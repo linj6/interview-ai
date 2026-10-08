@@ -1,0 +1,1 @@
+-- Establish the Flyway baseline. Business tables are introduced by the Slice that owns them.

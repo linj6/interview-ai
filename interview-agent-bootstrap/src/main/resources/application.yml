@@ -1,0 +1,44 @@
+spring:
+  application:
+    name: interview-agent
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/interview_agent?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
+    username: ${DB_USERNAME:interview_agent}
+    password: ${DB_PASSWORD:}
+  flyway:
+    enabled: true
+  ai:
+    model:
+      chat: none
+      audio:
+        speech: none
+        transcription: none
+      image: none
+      embedding: none
+      rerank: none
+      video: none
+    dashscope:
+      agent:
+        enabled: false
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+app:
+  interview:
+    duration-minutes: ${INTERVIEW_DURATION_MINUTES:60}
+    max-main-questions: ${MAX_MAIN_QUESTIONS:5}
+    max-follow-ups-per-main-question: ${MAX_FOLLOW_UPS_PER_MAIN_QUESTION:2}
+  ai:
+    real-llm-enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never

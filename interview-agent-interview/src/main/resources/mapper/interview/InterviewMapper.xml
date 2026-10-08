@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+    namespace="com.linj6.interviewagent.interview.infrastructure.persistence.mapper.InterviewMapper">
+    <select id="selectForUpdate"
+        resultType="com.linj6.interviewagent.interview.infrastructure.persistence.entity.InterviewDO">
+        SELECT * FROM interview WHERE id = #{id} FOR UPDATE
+    </select>
+
+    <!-- 所有 Interview 状态流转同时校验业务状态、执行阶段和乐观锁版本。 -->
+    <update id="changeStatusAtWaitingAnswer">
+        UPDATE interview
+        SET status = #{targetStatus}, version = version + 1
+        WHERE id = #{id}
+        AND status = #{expectedStatus}
+        AND current_phase = #{expectedPhase}
+        AND version = #{version}
+    </update>
+
+    <update id="finish">
+        UPDATE interview
+        SET status = 'COMPLETED', current_phase = NULL, completed_at =
+        #{completedAt}, version = version + 1
+        WHERE id = #{id}
+        AND status = #{expectedStatus}
+        AND current_phase = #{expectedPhase}
+        AND version = #{version}
+        AND completed_at IS NULL
+    </update>
+
+    <update id="completeExpiredWaiting">
+        UPDATE interview
+        SET status = 'COMPLETED', current_phase = NULL, completed_at =
+        #{completedAt}, version = version + 1
+        WHERE id = #{id}
+        AND status = #{expectedStatus}
+        AND current_phase = #{expectedPhase}
+        AND version = #{version}
+        AND completed_at IS NULL
+    </update>
+
+    <update id="markOpening">
+        UPDATE interview
+        SET status = #{targetStatus},
+        current_phase = #{targetPhase}, started_at = #{startedAt}, expires_at =
+        #{expiresAt}, version =
+        version + 1
+        WHERE id = #{id}
+        AND status = #{expectedStatus}
+        AND current_phase IS NULL
+        AND version =
+        #{version}
+    </update>
+
+    <update id="markWaitingAfterOpening">
+        UPDATE interview
+        SET current_phase = #{targetPhase},
+        version = version + 1
+        WHERE id = #{id}
+        AND status = #{expectedStatus}
+        AND current_phase = #{expectedPhase}
+        AND version = #{version}
+    </update>
+
+    <update id="markProcessingTurnBeforeDeadline">
+        UPDATE interview
+        SET current_phase = #{targetPhase},
+        version = version + 1
+        WHERE id = #{id}
+        AND status = #{expectedStatus}
+        AND current_phase = #{expectedPhase}
+        AND version = #{version}
+        AND (expires_at IS NULL OR expires_at > #{now})
+    </update>
+
+    <update id="markWaitingAfterTurn">
+        UPDATE interview
+        SET current_phase = #{targetPhase}, version = version + 1
+        WHERE id = #{id}
+        AND status = #{expectedStatus}
+        AND current_phase = #{expectedPhase}
+        AND version = #{version}
+    </update>
+
+    <update id="completeAfterTurn">
+        UPDATE interview
+        SET status = #{targetStatus}, current_phase = NULL, completed_at =
+        #{completedAt}, version = version + 1
+        WHERE id = #{id}
+        AND status = #{expectedStatus}
+        AND current_phase = #{expectedPhase}
+        AND version = #{version}
+        AND completed_at IS NULL
+    </update>
+
+    <!-- Opening 失败仅在未形成正式 Question 时恢复。 -->
+    <update id="recoverOpening">
+        UPDATE interview
+        SET status = #{targetStatus},
+        current_phase = NULL, started_at = NULL, expires_at = NULL, version = version + 1
+        WHERE id = #{id}
+        AND status
+        = #{expectedStatus}
+        AND current_phase = #{expectedPhase}
+        AND version =
+        #{version}
+        AND NOT EXISTS (
+        SELECT 1
+        FROM question
+        WHERE
+        question.interview_id = interview.id
+        )
+    </update>
+
+</mapper>

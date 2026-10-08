@@ -1,0 +1,57 @@
+# Maven
+target/
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+
+# Logs and JVM diagnostics
+*.log
+hs_err_pid*
+replay_pid*
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+application-local.yml
+application-local.yaml
+scripts/*.local.ps1
+
+# Private keys and certificate containers
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Local database exports (keep versioned SQL migrations trackable)
+dump.sql
+dump-*.sql
+dump_*.sql
+*.dump
+*.sql.gz
+*.sql.bz2
+*.sql.xz
+*.sql.zip
+*.bak
+dumps/
+backups/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db

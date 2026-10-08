@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+    namespace="com.linj6.interviewagent.interview.infrastructure.persistence.mapper.QuestionMapper">
+    <!-- Question 生命周期条件更新需要校验归属和期望旧状态。 -->
+    <update id="markAnswered">
+        UPDATE question
+        SET status = #{targetStatus}
+        WHERE id =
+        #{id}
+        AND interview_id = #{interviewId}
+        AND status = #{expectedStatus}
+    </update>
+    <update id="markSkipped">
+        UPDATE question
+        SET status = #{targetStatus}
+        WHERE id = #{id}
+        AND interview_id = #{interviewId}
+        AND status = #{expectedStatus}
+    </update>
+</mapper>

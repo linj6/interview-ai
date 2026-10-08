@@ -1,0 +1,14 @@
+# Only versioned backend source is needed; never send local secrets or outputs.
+**
+!pom.xml
+!docker/
+!docker/maven/
+!docker/maven/settings.xml
+!interview-agent-*/
+!interview-agent-*/**
+**/target
+**/.env
+**/.env.*
+**/*.local.*
+**/application-local.yml
+**/application-local.yaml

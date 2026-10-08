@@ -1,0 +1,31 @@
+{
+  "name": "interview-agent-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "type-check": "vue-tsc --noEmit",
+    "test:api": "node --test tests/api.test.mjs",
+    "test:runtime": "node --test tests/runtime.test.mjs",
+    "test:recovery": "node --test tests/recovery.test.mjs",
+    "test:review": "node --test tests/review.test.mjs",
+    "test:create-start": "node --test tests/create-start.test.mjs",
+    "test:profile": "node --test tests/profile.test.mjs",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.5.43",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.9",
+    "typescript": "~5.9.3",
+    "vite": "^8.3.2",
+    "vue-tsc": "^3.3.12"
+  }
+}

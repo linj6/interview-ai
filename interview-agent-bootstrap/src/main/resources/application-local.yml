@@ -1,0 +1,17 @@
+app:
+  ai:
+    real-llm-enabled: true
+
+spring:
+  ai:
+    model:
+      chat: dashscope
+    dashscope:
+      api-key: ${AI_DASHSCOPE_API_KEY}
+      chat:
+        options:
+          model: ${AI_DASHSCOPE_CHAT_MODEL:qwen-plus}
+
+logging:
+  level:
+    com.linj6.interviewagent: DEBUG
